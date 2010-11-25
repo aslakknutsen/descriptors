@@ -363,6 +363,20 @@ public class WebAppDescriptorImpl extends SchemaDescriptorImplBase<WebAppModel> 
       return this;
    }
    
+   @Override
+   public WebAppDescriptor envEntry(String name, Class<?> type, String value)
+   {
+      model.getEnvEntries().add(new EnvEntry(name, type.getName(), value));
+      return this;
+   }
+   
+   @Override
+   public WebAppDescriptor envEntry(String name, String type, String value)
+   {
+      model.getEnvEntries().add(new EnvEntry(name, type, value));
+      return this;
+   }
+   
    /**
     * {@inheritDoc}
     * @see org.jboss.shrinkwrap.descriptor.spi.SchemaDescriptorProvider#getSchemaModel()

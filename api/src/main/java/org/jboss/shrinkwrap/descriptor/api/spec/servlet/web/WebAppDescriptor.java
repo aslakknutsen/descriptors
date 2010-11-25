@@ -102,4 +102,7 @@ public interface WebAppDescriptor extends Descriptor
 
    WebAppDescriptor absoluteOrdering(String... names);
 
+   WebAppDescriptor envEntry(String name, String type, String value);
+   
+   WebAppDescriptor envEntry(String name, Class<?> type, String value);
 }

@@ -16,6 +16,8 @@
  */
 package org.jboss.shrinkwrap.descriptor.impl.spec.servlet.web;
 
+import static org.jboss.shrinkwrap.descriptor.impl.spec.AssertXPath.assertXPath;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,10 +26,14 @@ import java.util.logging.Logger;
 import javax.faces.application.StateManager;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jboss.shrinkwrap.descriptor.api.Descriptors;
+import org.jboss.shrinkwrap.descriptor.api.spec.jpa.persistence.PersistenceDescriptor;
+import org.jboss.shrinkwrap.descriptor.api.spec.jpa.persistence.PersistenceUnitDef;
 import org.jboss.shrinkwrap.descriptor.api.spec.servlet.web.AuthMethodType;
 import org.jboss.shrinkwrap.descriptor.api.spec.servlet.web.HttpMethodType;
 import org.jboss.shrinkwrap.descriptor.api.spec.servlet.web.TrackingModeType;
 import org.jboss.shrinkwrap.descriptor.api.spec.servlet.web.TransportGuaranteeType;
+import org.jboss.shrinkwrap.descriptor.api.spec.servlet.web.WebAppDescriptor;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -134,6 +140,40 @@ public class WebAppDefTestCase
       String expected = getResourceContents("/test-session-config-web.xml");
 
       Assert.assertEquals(expected, webApp);
+   }
+
+   @Test
+   public void shouldBeAbleToEnvEntry() throws Exception
+   {
+      String desc = create()
+                     .envEntry("test-name", "test-type", "test-value")
+                     .exportAsString();
+
+      assertXPath(desc, "/web-app/env-entry/env-entry-name", "test-name");
+      assertXPath(desc, "/web-app/env-entry/env-entry-type", "test-type");
+      assertXPath(desc, "/web-app/env-entry/env-entry-value", "test-value");
+   }
+   
+   @Test
+   public void shouldBeAbleToEnvEntries() throws Exception
+   {
+      String desc = create()
+                     .envEntry("test-name-1", "test-type", "test-value-1")
+                     .envEntry("test-name-2", String.class, "test-value-2")
+                     .exportAsString();
+
+      assertXPath(desc, "/web-app/env-entry/env-entry-name", "test-name-1", "test-name-2");
+      assertXPath(desc, "/web-app/env-entry/env-entry-type", "test-type", "java.lang.String");
+      assertXPath(desc, "/web-app/env-entry/env-entry-value", "test-value-1", "test-value-2");
+   }
+
+   //-------------------------------------------------------------------------------------||
+   // Internal Helper --------------------------------------------------------------------||
+   //-------------------------------------------------------------------------------------||
+
+   private WebAppDescriptor create()
+   {
+      return Descriptors.create(WebAppDescriptor.class);
    }
 
    private String getResourceContents(String resource) throws Exception

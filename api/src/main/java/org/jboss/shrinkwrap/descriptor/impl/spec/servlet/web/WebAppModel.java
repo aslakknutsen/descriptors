@@ -59,7 +59,7 @@ import org.jboss.shrinkwrap.descriptor.spi.SchemaModel;
       "loginConfig",
       "securityRoles",
       // "localEncodingMappingList",
-      //"envEntries",
+      "envEntries",
       // "ejbRefs",
       // "ejbLocalRefs",
       // "serviceRefs",
@@ -139,6 +139,9 @@ public class WebAppModel implements SchemaModel
    
    @XmlElement(name = "absolute-ordering")
    protected List<AbsoluteOrdering> absoluteOrdering;
+   
+   @XmlElement(name = "env-entry")
+   protected List<EnvEntry> envEntries;
    
    //-------------------------------------------------------------------------------------||
    // Constructor ------------------------------------------------------------------------||
@@ -333,6 +336,18 @@ public class WebAppModel implements SchemaModel
       return absoluteOrdering;
    }
 
+   /**
+    * @return the envEntries
+    */
+   public List<EnvEntry> getEnvEntries()
+   {
+      if(envEntries == null)
+      {
+         envEntries = new ArrayList<EnvEntry>();
+      }
+      return envEntries;
+   }
+   
    //-------------------------------------------------------------------------------------||
    // Required Implementations - Descriptor ----------------------------------------------||
    //-------------------------------------------------------------------------------------||
